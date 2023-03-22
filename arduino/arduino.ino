@@ -64,13 +64,13 @@ void post_data(const String post_data)
 void loop()
 {
     DynamicJsonDocument doc(1024);
-    doc["test"] = std::to_string(count);
+    doc["test"] = count;
 
     char serialize[1024] = { 0 };
     serializeJson(doc, serialize);
 
     post_data(static_cast<String>(serialize));
 
-    count+=10;
-    delay(1000);
+    count += 1;
+    delay(10000);
 }
