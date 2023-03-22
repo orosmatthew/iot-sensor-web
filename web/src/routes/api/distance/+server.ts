@@ -8,3 +8,8 @@ export const POST = (async ({ request }) => {
   await prisma.distance.create({ data: { cm: data.cm } });
   return json({ status: 'success' });
 }) satisfies RequestHandler;
+
+export const GET = (async () => {
+  let distanceData = await prisma.distance.findMany();
+  return json({ distance: distanceData });
+}) satisfies RequestHandler;
