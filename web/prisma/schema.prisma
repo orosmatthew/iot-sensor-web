@@ -14,3 +14,8 @@ model Test {
   id   Int     @id @default(autoincrement())
   name String?
 }
+
+model Counter {
+  id  Int @id @default(autoincrement())
+  num Int
+}
