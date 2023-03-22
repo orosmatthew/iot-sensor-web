@@ -5,6 +5,6 @@ const prisma = new PrismaClient();
 
 export const POST = (async ({ request }) => {
   let data = await request.json();
-  await prisma.counter.create({ data: { num: data.test } });
+  await prisma.distance.create({ data: { cm: data.cm } });
   return json({ status: 'success' });
 }) satisfies RequestHandler;

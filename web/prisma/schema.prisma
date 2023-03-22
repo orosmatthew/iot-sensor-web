@@ -10,12 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Test {
-  id   Int     @id @default(autoincrement())
-  name String?
-}
-
-model Counter {
-  id  Int @id @default(autoincrement())
-  num Int
+model Distance {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  cm        Int
 }
