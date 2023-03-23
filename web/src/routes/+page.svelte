@@ -11,6 +11,7 @@
     let res = await fetch('/api/temp', { method: 'GET' });
     res.json().then((tempData: TempData) => {
       console.log(tempData.temp);
+      chart.data.labels = tempData.temp.map((row) => row.createdAt);
       chart.data.datasets[0].data = tempData.temp.map((row) => row.temp);
       chart.update();
     });
