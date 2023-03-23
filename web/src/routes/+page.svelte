@@ -3,8 +3,18 @@
   import Chart from 'chart.js/auto';
   import 'chartjs-adapter-date-fns';
   import { onMount } from 'svelte';
+  import type { TempData } from './api/temp/+server';
 
   export let data: PageData;
+
+  async function fetchTemp(chart: Chart) {
+    let res = await fetch('/api/temp', { method: 'GET' });
+    res.json().then((tempData: TempData) => {
+      console.log(tempData.temp);
+      chart.data.datasets[0].data = tempData.temp.map((row) => row.temp);
+      chart.update();
+    });
+  }
 
   onMount(async () => {
     Chart.defaults.borderColor = '#777777';
@@ -22,11 +32,11 @@
         }
       },
       data: {
-        labels: data.distance.map((row) => row.createdAt),
+        labels: data.temp.map((row) => row.createdAt),
         datasets: [
           {
-            label: 'Distance (cm)',
-            data: data.distance.map((row) => row.cm)
+            label: 'Temperature (F)',
+            data: data.temp.map((row) => row.temp)
           }
         ]
       }
@@ -34,23 +44,14 @@
     window.addEventListener('resize', () => {
       chart.resize();
     });
+    setInterval(fetchTemp, 10000, chart);
   });
 </script>
 
 <body class="container">
-  <h1 class="mt-2 mb-5">Distance Sensor</h1>
+  <h1 class="mt-2 mb-5">Temperature Sensor</h1>
   <div class="row">
-    <div class="col-lg-6">
-      <h2>Data</h2>
-      <ul>
-        {#each data.distance as distanceData}
-          <li>{distanceData.createdAt}: {distanceData.cm}</li>
-        {/each}
-      </ul>
-    </div>
-    <div class="col-lg-6">
-      <h2>Chart</h2>
-      <div style="width: 100%"><canvas id="chart" /></div>
-    </div>
+    <h2>Chart</h2>
+    <div style="width: 100%"><canvas id="chart" /></div>
   </div>
 </body>
