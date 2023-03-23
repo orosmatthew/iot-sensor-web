@@ -3,12 +3,12 @@
   import Chart from 'chart.js/auto';
   import 'chartjs-adapter-date-fns';
   import { onMount } from 'svelte';
-  import type { TempData } from './api/temp/+server';
+  import type { TempData } from './api/temp/types';
 
   export let data: PageData;
 
   async function fetchTemp(chart: Chart) {
-    let res = await fetch('/api/temp', { method: 'GET' });
+    let res = await fetch('/api/temp/20', { method: 'GET' });
     let tempData = (await res.json()) as TempData;
     chart.data.labels = tempData.temp.map((row) => row.createdAt);
     chart.data.datasets[0].data = tempData.temp.map((row) => row.temp);
