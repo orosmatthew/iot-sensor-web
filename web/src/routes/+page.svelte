@@ -9,12 +9,10 @@
 
   async function fetchTemp(chart: Chart) {
     let res = await fetch('/api/temp', { method: 'GET' });
-    res.json().then((tempData: TempData) => {
-      console.log(tempData.temp);
-      chart.data.labels = tempData.temp.map((row) => row.createdAt);
-      chart.data.datasets[0].data = tempData.temp.map((row) => row.temp);
-      chart.update();
-    });
+    let tempData = (await res.json()) as TempData;
+    chart.data.labels = tempData.temp.map((row) => row.createdAt);
+    chart.data.datasets[0].data = tempData.temp.map((row) => row.temp);
+    chart.update();
   }
 
   onMount(async () => {
@@ -33,11 +31,11 @@
         }
       },
       data: {
-        labels: data.temp.map((row) => row.createdAt),
+        labels: data.tempData.temp.map((row) => row.createdAt),
         datasets: [
           {
             label: 'Temperature (F)',
-            data: data.temp.map((row) => row.temp)
+            data: data.tempData.temp.map((row) => row.temp)
           }
         ]
       }
