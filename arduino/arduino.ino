@@ -1,17 +1,19 @@
 #include <Arduino.h>
-
+#include <ArduinoJson.h>
+#include <DHT.h>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include <WiFiClient.h>
 
-#include <ArduinoJson.h>
-
 #include "env.h"
 
-ESP8266WiFiMulti WiFiMulti;
+#define DHTPIN 2
+#define DHTTYPE DHT11
 
-int count = 0;
+DHT dht(DHTPIN, DHTTYPE);
+
+ESP8266WiFiMulti WiFiMulti;
 
 void setup()
 {
@@ -29,6 +31,8 @@ void setup()
 
     WiFi.mode(WIFI_STA);
     WiFiMulti.addAP(STASSID, STAPSK);
+
+    dht.begin();
 }
 
 void post_data(const String post_data)
@@ -63,14 +67,22 @@ void post_data(const String post_data)
 
 void loop()
 {
+    float f = dht.readTemperature(true);
+
+    if (isnan(f)) {
+        delay(2000);
+        return;
+    }
+
     DynamicJsonDocument doc(1024);
-    doc["test"] = count;
+    doc["temp"] = f;
 
     char serialize[1024] = { 0 };
     serializeJson(doc, serialize);
 
+    printf("Serialize: %s\n", serialize);
+
     post_data(static_cast<String>(serialize));
 
-    count += 1;
     delay(10000);
 }
