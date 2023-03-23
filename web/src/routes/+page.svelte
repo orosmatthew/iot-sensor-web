@@ -47,6 +47,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Temperature</title>
+</svelte:head>
+
 <body class="container">
   <h1 class="mt-2 mb-5">Temperature Sensor</h1>
   <div class="row">
