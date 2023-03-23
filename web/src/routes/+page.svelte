@@ -15,7 +15,7 @@
     chart.update();
   }
 
-  onMount(async () => {
+  onMount(() => {
     Chart.defaults.borderColor = '#777777';
     Chart.defaults.color = '#E1E1E1';
     let chart = new Chart(document.getElementById('chart') as HTMLCanvasElement, {
