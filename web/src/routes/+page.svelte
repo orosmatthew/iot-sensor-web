@@ -7,9 +7,14 @@
 
   export let data: PageData;
 
+  let tempData = data.tempData;
+
+  $: latest = tempData.temp[tempData.temp.length - 1];
+
+
   async function fetchTemp(chart: Chart) {
     let res = await fetch('/api/temp/20', { method: 'GET' });
-    let tempData = (await res.json()) as TempData;
+    tempData = (await res.json()) as TempData;
     chart.data.labels = tempData.temp.map((row) => row.createdAt);
     chart.data.datasets[0].data = tempData.temp.map((row) => row.temp);
     chart.update();
@@ -53,8 +58,18 @@
 
 <body class="container">
   <h1 class="mt-2 mb-5">Temperature Sensor</h1>
-  <div class="row">
+  <div class="row" style="font-size: 18px;">
+    <h2>
+      Latest: {latest.temp.toFixed(1)}°F at {new Date(latest.createdAt).toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      })}
+    </h2>
+  </div>
+  <div class="row mt-2">
     <h2>Chart</h2>
     <div style="width: 100%"><canvas id="chart" /></div>
-  </div>
-</body>
+  </div></body
+>
