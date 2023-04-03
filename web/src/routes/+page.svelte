@@ -4,6 +4,7 @@
   import 'chartjs-adapter-date-fns';
   import { onMount } from 'svelte';
   import type { TempData } from './api/temp/types';
+    import type { Temp } from '@prisma/client';
 
   export let data: PageData;
 
@@ -60,12 +61,14 @@
   <h1 class="mt-2 mb-5">Temperature Sensor</h1>
   <div class="row" style="font-size: 18px;">
     <h2>
+      {#if latest}
       Latest: {latest.temp.toFixed(1)}°F at {new Date(latest.createdAt).toLocaleTimeString([], {
         hour: 'numeric',
         minute: '2-digit',
         second: '2-digit',
         hour12: true
       })}
+      {/if}
     </h2>
   </div>
   <div class="row mt-2">
