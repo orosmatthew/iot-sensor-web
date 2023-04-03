@@ -4,14 +4,12 @@
   import 'chartjs-adapter-date-fns';
   import { onMount } from 'svelte';
   import type { TempData } from './api/temp/types';
-    import type { Temp } from '@prisma/client';
 
   export let data: PageData;
 
   let tempData = data.tempData;
 
   $: latest = tempData.temp[tempData.temp.length - 1];
-
 
   async function fetchTemp(chart: Chart) {
     let res = await fetch('/api/temp/20', { method: 'GET' });
@@ -62,12 +60,12 @@
   <div class="row" style="font-size: 18px;">
     <h2>
       {#if latest}
-      Latest: {latest.temp.toFixed(1)}°F at {new Date(latest.createdAt).toLocaleTimeString([], {
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      })}
+        Latest: {latest.temp.toFixed(1)}°F at {new Date(latest.createdAt).toLocaleTimeString([], {
+          hour: 'numeric',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        })}
       {/if}
     </h2>
   </div>
